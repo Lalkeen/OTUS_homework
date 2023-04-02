@@ -8,8 +8,8 @@ from homework_02.engine import Engine
 
 
 class Car(Vehicle):
-    def __init__(self, weight: int, fuel: int, fuel_consumption: int, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    def __init__(self, weight, fuel, fuel_consumption):
+       # super().__init__(*args, **kwargs)
         self.engine = Engine(volume=1.4, pistons=4)
         self.weight = weight
         self.fuel = fuel
