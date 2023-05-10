@@ -11,7 +11,7 @@ RUN poetry config virtualenvs.create false --local
 COPY poetry.lock pyproject.toml ./
 RUN poetry install --no-ansi --only main
 
-COPY main.py views.py .
+COPY main.py views.py ./
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
 EXPOSE 8000
