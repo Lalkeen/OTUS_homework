@@ -14,12 +14,16 @@
 """
 from typing import Iterable
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from homework_04.models import User, Post
 from jsonplaceholder_requests import fetch_data, USERS_DATA_URL, POSTS_DATA_URL
 from models import User, Post, async_engine, async_session, Base
 import asyncio
 
 
-async def fetch_users_data() -> list[User]:
+async def fetch_users_data(
+    session: AsyncSession,
+) -> list[User]:
     datas: list = await fetch_data(USERS_DATA_URL)
     users = []
     for data in datas:
@@ -34,7 +38,9 @@ async def fetch_users_data() -> list[User]:
     return users
 
 
-async def fetch_posts_data() -> list[Post]:
+async def fetch_posts_data(
+    session: AsyncSession,
+) -> list[Post]:
     datas: list = await fetch_data(POSTS_DATA_URL)
     posts = []
     for data in datas:
@@ -49,9 +55,7 @@ async def fetch_posts_data() -> list[Post]:
     return posts
 
 
-async def create_users_db(
-    session: AsyncSession, data: Iterable[User]
-) -> Iterable[User]:
+async def create_users_db(session: AsyncSession, data: Iterable[User]) -> Iterable[User]:
     user = data
     session.add_all(user)
     await session.commit()
@@ -74,15 +78,14 @@ async def async_main():
         users_data: User[list]
         posts_data: Post[list]
         users_data, posts_data = await asyncio.gather(
-            fetch_users_data(),
-            fetch_posts_data(),
+            fetch_users_data(session),
+            fetch_posts_data(session),
         )
         await create_users_db(session, users_data)
         await create_users_db(session, posts_data)
 
 
 def main():
-    # Base.metadata.create_all(bind=engine)
     asyncio.run(async_main())
 
 
