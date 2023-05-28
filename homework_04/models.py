@@ -30,11 +30,9 @@ PG_CONN_URI = (
 engine = create_engine(url=PG_CONN_URI, echo=False)
 async_engine = create_async_engine(url=PG_CONN_URI, echo=False)
 
-async_session = sessionmaker(async_engine, expire_on_commit=False, class_=AsyncSession)
+Session = sessionmaker(async_engine, expire_on_commit=False, class_=AsyncSession)
 
 metadata = MetaData()
-
-Session = sessionmaker(async_engine, expire_on_commit=False, class_=AsyncSession)
 
 
 class Base:
