@@ -81,10 +81,10 @@ async def async_main():
             fetch_users_data(session),
             fetch_posts_data(session),
         )
-        await asyncio.gather(
-            create_users_db(session, users_data),
-            create_users_db(session, posts_data)
-        )
+
+        await create_users_db(session, users_data),
+        await create_users_db(session, posts_data)
+
 
 
 def main():
