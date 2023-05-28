@@ -24,7 +24,6 @@ import os
 
 PG_CONN_URI = os.environ.get("SQLALCHEMY_PG_CONN_URI") or "postgresql+asyncpg://postgres:password@localhost/postgres"
 
-engine = create_engine(url=PG_CONN_URI, echo=False)
 async_engine = create_async_engine(url=PG_CONN_URI, echo=False)
 
 Session = sessionmaker(async_engine, expire_on_commit=False, class_=AsyncSession)
