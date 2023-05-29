@@ -15,15 +15,12 @@
 from typing import Iterable
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from homework_04.models import User, Post
 from jsonplaceholder_requests import fetch_data, USERS_DATA_URL, POSTS_DATA_URL
 from models import User, Post, async_engine, Session, Base
 import asyncio
 
 
-async def fetch_users_data(
-        session: AsyncSession,
-) -> list[User]:
+async def fetch_users_data() -> list[User]:
     datas: list = await fetch_data(USERS_DATA_URL)
     users = []
     for data in datas:
@@ -38,9 +35,7 @@ async def fetch_users_data(
     return users
 
 
-async def fetch_posts_data(
-        session: AsyncSession,
-) -> list[Post]:
+async def fetch_posts_data() -> list[Post]:
     datas: list = await fetch_data(POSTS_DATA_URL)
     posts = []
     for data in datas:
@@ -57,7 +52,9 @@ async def fetch_posts_data(
 
 async def create_db(table_name: str):
     async with async_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all, tables=[Base.metadata.tables[table_name]])
+        await conn.run_sync(
+            Base.metadata.create_all, tables=[Base.metadata.tables[table_name]]
+        )
 
 
 async def create_user_db(session: AsyncSession, data: Iterable[User]) -> Iterable[User]:
@@ -83,8 +80,8 @@ async def async_main():
         users_data: Iterable[User]
         posts_data: Iterable[Post]
         users_data, posts_data = await asyncio.gather(
-            fetch_users_data(session),
-            fetch_posts_data(session),
+            fetch_users_data(),
+            fetch_posts_data(),
         )
 
         await create_user_db(session, users_data),
