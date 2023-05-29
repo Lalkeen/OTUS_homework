@@ -55,7 +55,13 @@ async def fetch_posts_data(
     return posts
 
 
-async def create_users_db(session: AsyncSession, data: Iterable[User]) -> Iterable[User]:
+async def create_db(table_name: str):
+    async with async_engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all, tables=[Base.metadata.tables[table_name]])
+
+
+async def create_user_db(session: AsyncSession, data: Iterable[User]) -> Iterable[User]:
+    await create_db("User")
     user = data
     session.add_all(user)
     await session.commit()
@@ -64,6 +70,7 @@ async def create_users_db(session: AsyncSession, data: Iterable[User]) -> Iterab
 
 
 async def create_post_db(session: AsyncSession, data: Iterable[Post]) -> Iterable[Post]:
+    await create_db("Post")
     post = data
     session.add_all(post)
     await session.commit()
@@ -72,19 +79,16 @@ async def create_post_db(session: AsyncSession, data: Iterable[Post]) -> Iterabl
 
 
 async def async_main():
-    async with async_engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
     async with Session() as session:
-        users_data: User[list]
-        posts_data: Post[list]
+        users_data: Iterable[User]
+        posts_data: Iterable[Post]
         users_data, posts_data = await asyncio.gather(
             fetch_users_data(session),
             fetch_posts_data(session),
         )
 
-        await create_users_db(session, users_data),
-        await create_users_db(session, posts_data)
-
+        await create_user_db(session, users_data),
+        await create_post_db(session, posts_data)
 
 
 def main():
