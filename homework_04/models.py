@@ -21,10 +21,13 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 import os
 
 
-PG_CONN_URI = (
-    os.environ.get("SQLALCHEMY_PG_CONN_URI")
-    or "postgresql+asyncpg://postgres:password@localhost/postgres"
-)
+# PG_CONN_URI = (
+#     os.environ.get("SQLALCHEMY_PG_CONN_URI")
+#     or "postgresql+asyncpg://postgres:password@localhost/postgres"
+# )
+
+DB_URL = "postgresql+pg8000://username:passwd@0.0.0.0:5432/blog"
+PG_CONN_URI = DB_URL.replace("pg8000", "asyncpg")
 
 async_engine = create_async_engine(url=PG_CONN_URI, echo=False)
 
