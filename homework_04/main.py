@@ -83,9 +83,9 @@ async def async_main():
             fetch_users_data(),
             fetch_posts_data(),
         )
-
-        await create_user_db(session, users_data),
-        await create_post_db(session, posts_data)
+        await asyncio.gather(
+            create_user_db(session, users_data), create_post_db(session, posts_data)
+        )
 
 
 def main():
