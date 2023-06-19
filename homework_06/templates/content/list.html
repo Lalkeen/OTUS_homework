@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Content list
+{% endblock %}
+
+{% block body %}
+  <h2>This list shows added content</h2>
+
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class="flashes">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+
+  {% if things %}
+    <h3>Content:</h3>
+    <ul class="list-group">
+      {% for thing in things %}
+        <li class="list-group-item p-0">
+          <a class="btn btn-link w-100 text-start text-decoration-none"
+             href="{{ url_for('content_app.details', content_id=thing.id) }}">
+            {{ thing.name }}
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <h3>No content yet.</h3>
+  {% endif %}
+
+  <div>
+    <a
+      class="no-underline"
+      href="{{ url_for('content_app.add') }}">Add new</a>
+  </div>
+
+{% endblock %}

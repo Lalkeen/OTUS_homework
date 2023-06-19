@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  Confirm delete thing #{{ thing.id }}
+{% endblock %}
+
+{% block body %}
+  <h3>Are you sure you want to delete thing <code>{{ thing.name }}</code>?</h3>
+  <h4>This cannot be undone!</h4>
+
+  <div>
+    <a href="{{ url_for('content_app.details', content_id=thing.id) }}">
+      Back to Content list
+    </a>
+  </div>
+  <br/>
+  <div>
+    <form method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <input type="submit" value="Delete">
+    </form>
+  </div>
+{% endblock %}
