@@ -1,0 +1,19 @@
+{% extends 'showcase_app/base.html' %}
+{% block title %}
+    Showcase index
+{% endblock %}
+
+{% block body %}
+    <div>
+        <h1>Витрина</h1>
+        <h3>Товар: Описание</h3>
+        <ul>
+            {% for product in showcase %}
+                <li>{{ product.name }}: {{ product.description }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+        <a href="{% url 'showcase_app:product_form' %}">Создать товар</a>
+    </div>
+{% endblock %}
